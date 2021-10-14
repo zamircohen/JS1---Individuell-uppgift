@@ -8,13 +8,22 @@
 
     <body>
 
-        <h2>Shopping cart</h2>
+        <div id="filter">
+            <label for="rating">Filter on rating (1-5)</label>
+            <input id="rating" type="text" value="1" min="1" max="5"/>
+            <button onclick="handleOnClick()" id="filterButton">Filter</button>
 
-        <div id="shopping">
-            <p id="total"></p>
-            <hr>
         </div>
 
+        <h2>Shopping cart</h2>
+        <p id="total"></p>
+
+
+        <div id="shopping">            
+            
+        </div>
+
+        <hr>
 
         <div id="products">
         </div>
@@ -22,18 +31,34 @@
 
         <script>
 
+            const url = "https://mock-data-api.firebaseio.com/webb21/products.json"
+
             let total = 0
+            let rateInput = 0
             const totalMessage = document.getElementById("total")
             totalMessage.innerText = "Total: 0kr" 
 
-
             const productContainer = document.getElementById("products")
-            // const shoppingContainer = document.getElementById("shopping")
+            const shoppingContainer = document.getElementById("shopping")
 
-            fetch("https://mock-data-api.firebaseio.com/webb21/products.json")
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
+            const filterButton = document.getElementById("filterButton")
+            const userRating = document.getElementById("rating")
+
+
+            function handleOnClick(){
+                const userInput = document.getElementById("rating")
+                const rating = userInput.value
+                
+                document.getElementById("products").innerHTML = ""                 // Clears the productlist
+
+                getMessageList(rating)
+            }
+
+
+
+
+                function renderArticleItem(item, rating) {
+
                     const productName = document.createElement("h3")
                     productName.innerText = item.name
 
@@ -49,31 +74,72 @@
                     const productStock = document.createElement("p")
                     productStock.innerText = `In stock: ${item.stock}`
 
+                    const buyButton = document.createElement("button")
+                    buyButton.innerText = `Buy`
+
+                    buyButton.addEventListener("click", function() {
+                        
+                        total += item.price
+                        totalMessage.innerText = `Total: ${total}kr`
+
+                        const shoppingList = document.createElement("p")
+                        shoppingList.innerText = `${item.name}kr - ${item.price}kr`
+                        
+                        shoppingContainer.appendChild(shoppingList)
+                    })
+
+
                     const line = document.createElement("hr")
 
                     const image = document.createElement("img")
                     image.src = item["images"]["0"]["src"]["small"]
                     image.alt = item["images"]["0"]["alt"]
                     image.width = "300"
-                    
-                    image.addEventListener("click", function() {
-                        
-                        total += item.price
-                        totalMessage.innerText = `Total: ${total}kr`
 
-                    })
+                    // Adds product in total and list on a click
+                    // image.addEventListener("click", function() {                        
+                    //     total += item.price
+                    //     totalMessage.innerText = `Total: ${total}kr`
+                    //     const shoppingList = document.createElement("p")
+                    //     shoppingList.innerText = `${item.name}kr - ${item.price}kr`
+                    //     shoppingContainer.appendChild(shoppingList)
+                    // })
 
 
+
+                    if(item.rating >= rating){
                     productContainer.appendChild(productName)
                     productContainer.appendChild(image)
                     productContainer.appendChild(productDescription)
                     productContainer.appendChild(productPrice)
                     productContainer.appendChild(productRating)
                     productContainer.appendChild(productStock)
-                    productContainer.appendChild(line)
+                    productContainer.appendChild(buyButton)
+                    productContainer.appendChild(line)   
+                    }
+                    
 
+                }
+
+
+
+            function renderArticleList(articleList, rating) {
+                articleList.forEach(articleItem => {
+                    renderArticleItem(articleItem, rating)
                 })
-            })
+            }            
+
+
+            function getMessageList(rating) {
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                renderArticleList(data, rating)
+            })    
+        }
+
+
+       getMessageList(rateInput)
 
 
         </script>
