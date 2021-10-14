@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Individuella uppgiften - Store front</title>
+    </head>
+
+    <body>
+
+        <h2>Shopping cart</h2>
+
+        <div id="shopping">
+            <p id="total"></p>
+            <hr>
+        </div>
+
+
+        <div id="products">
+        </div>
+
+
+        <script>
+
+            let total = 0
+            const totalMessage = document.getElementById("total")
+            totalMessage.innerText = "Total: 0kr" 
+
+
+            const productContainer = document.getElementById("products")
+            // const shoppingContainer = document.getElementById("shopping")
+
+            fetch("https://mock-data-api.firebaseio.com/webb21/products.json")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    const productName = document.createElement("h3")
+                    productName.innerText = item.name
+
+                    const productDescription = document.createElement("p")
+                    productDescription.innerText = item.description
+
+                    const productPrice = document.createElement("p")
+                    productPrice.innerText = `Price: ${item.price}kr`
+
+                    const productRating = document.createElement("i")
+                    productRating.innerText = `Rating: ${item.rating}/5`
+
+                    const productStock = document.createElement("p")
+                    productStock.innerText = `In stock: ${item.stock}`
+
+                    const line = document.createElement("hr")
+
+                    const image = document.createElement("img")
+                    image.src = item["images"]["0"]["src"]["small"]
+                    image.alt = item["images"]["0"]["alt"]
+                    image.width = "300"
+                    
+                    image.addEventListener("click", function() {
+                        
+                        total += item.price
+                        totalMessage.innerText = `Total: ${total}kr`
+
+                    })
+
+
+                    productContainer.appendChild(productName)
+                    productContainer.appendChild(image)
+                    productContainer.appendChild(productDescription)
+                    productContainer.appendChild(productPrice)
+                    productContainer.appendChild(productRating)
+                    productContainer.appendChild(productStock)
+                    productContainer.appendChild(line)
+
+                })
+            })
+
+
+        </script>
+
+    </body>
+
+</html>
