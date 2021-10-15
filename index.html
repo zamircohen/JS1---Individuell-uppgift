@@ -28,6 +28,12 @@
         <div id="filter">
             <label for="rating">Filter on rating (0-5)</label>
             <input id="rating" type="text" value="" min="1" max="5"/>
+            <br>
+            <br>
+            <label for="priceRange">Filter on price</label>
+            <input id="minPrice" type="text" value="0" min="0"/>
+            <input id="maxPrice" type="text" value="999999" min="0"/>
+
             <button onclick="handleOnClick()" id="filterButton">Filter</button>
             <p id="errorMessage"></p>
 
@@ -55,6 +61,8 @@
 
             let total = 0
             let rateInput = 0
+            let minPriceInput = 0
+            let maxPriceInput = 999999
             const totalMessage = document.getElementById("total")
             totalMessage.innerText = "Total: 0kr" 
 
@@ -68,21 +76,28 @@
             function handleOnClick(){
                 const userInput = document.getElementById("rating")
                 const rating = userInput.value
+                
+                const userInputminPrice = document.getElementById("minPrice")
+                const userInputmaxPrice = document.getElementById("maxPrice")
+
+                const userMinPrice = userInputminPrice.value
+                const userMaxPrice = userInputmaxPrice.value
+
                 const errorMessage = document.getElementById("errorMessage")
 
-                if(rating < 0 || rating > 5){
-                    errorMessage.innerText = "Please insert a number between 0 and 5"
+                if(rating < 0 || rating > 5 || userMinPrice < 0 || userMaxPrice < 0){
+                    errorMessage.innerText = "Please insert valid values"
                 }else 
                 
                 errorMessage.innerText = ""
                 document.getElementById("products").innerHTML = ""                 // Clears the productlist
-                getMessageList(rating)
+                getMessageList(rating, userMinPrice, userMaxPrice)
             }
 
 
 
 
-                function renderArticleItem(item, rating) {
+                function renderArticleItem(item, rating, minPrice, maxPrice) {
 
                     const productName = document.createElement("h3")
                     productName.innerText = item.name
@@ -132,7 +147,7 @@
 
 
 
-                    if(item.rating >= rating){
+                    if(item.rating >= rating && item.price >= minPrice && item.price <= maxPrice){
                     productContainer.appendChild(productName)
                     productContainer.appendChild(image)
                     productContainer.appendChild(productDescription)
@@ -148,23 +163,23 @@
 
 
 
-            function renderArticleList(articleList, rating) {
+            function renderArticleList(articleList, rating, minPrice, maxPrice) {
                 articleList.forEach(articleItem => {
-                    renderArticleItem(articleItem, rating)
+                    renderArticleItem(articleItem, rating, minPrice, maxPrice)
                 })
             }            
 
 
-            function getMessageList(rating) {
+            function getMessageList(rating, minPrice, maxPrice) {
             fetch(url)
             .then(response => response.json())
             .then(data => {
-                renderArticleList(data, rating)
+                renderArticleList(data, rating, minPrice, maxPrice)
             })    
         }
 
 
-       getMessageList(rateInput)
+       getMessageList(rateInput, minPriceInput, maxPriceInput)
 
 
         </script>
