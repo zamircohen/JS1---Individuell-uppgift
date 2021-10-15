@@ -4,14 +4,32 @@
 
     <head>
         <title>Individuella uppgiften - Store front</title>
+
+        <style>
+            .header {
+                overflow: hidden;
+                /* background-color: rgb(116, 0, 184, 249, 250); */
+                background-color: rgb(255,255,255);             
+                position: sticky; /* Set the navbar to fixed position */
+                top: 0; /* Position the navbar at the top of the page */
+                width: 100%; /* Full width */
+            }    
+
+        </style>
+
+
+
     </head>
 
     <body>
 
+    <div class="header">
+
         <div id="filter">
-            <label for="rating">Filter on rating (1-5)</label>
-            <input id="rating" type="text" value="1" min="1" max="5"/>
+            <label for="rating">Filter on rating (0-5)</label>
+            <input id="rating" type="text" value="" min="1" max="5"/>
             <button onclick="handleOnClick()" id="filterButton">Filter</button>
+            <p id="errorMessage"></p>
 
         </div>
 
@@ -24,6 +42,8 @@
         </div>
 
         <hr>
+
+    </div>
 
         <div id="products">
         </div>
@@ -48,9 +68,14 @@
             function handleOnClick(){
                 const userInput = document.getElementById("rating")
                 const rating = userInput.value
-                
-                document.getElementById("products").innerHTML = ""                 // Clears the productlist
+                const errorMessage = document.getElementById("errorMessage")
 
+                if(rating < 0 || rating > 5){
+                    errorMessage.innerText = "Please insert a number between 0 and 5"
+                }else 
+                
+                errorMessage.innerText = ""
+                document.getElementById("products").innerHTML = ""                 // Clears the productlist
                 getMessageList(rating)
             }
 
@@ -83,7 +108,7 @@
                         totalMessage.innerText = `Total: ${total}kr`
 
                         const shoppingList = document.createElement("p")
-                        shoppingList.innerText = `${item.name}kr - ${item.price}kr`
+                        shoppingList.innerText = `${item.name} - ${item.price}kr`
                         
                         shoppingContainer.appendChild(shoppingList)
                     })
