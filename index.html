@@ -30,8 +30,9 @@
             <input id="rating" type="text" value="" min="1" max="5"/>
             <br>
             <br>
-            <label for="priceRange">Filter on price</label>
+            <label for="priceRangeMin">Filter on price. From </label>
             <input id="minPrice" type="text" value="0" min="0"/>
+            <label for="priceRangeMax"> to </label>
             <input id="maxPrice" type="text" value="999999" min="0"/>
 
             <button onclick="handleOnClick()" id="filterButton">Filter</button>
@@ -44,8 +45,12 @@
 
 
         <div id="shopping">            
-            
         </div>
+
+        <div>
+            <button onclick="deleteCartOnClick()" id="deleteButton">Clear cart</button>
+        </div>
+
 
         <hr>
 
@@ -94,6 +99,15 @@
                 getMessageList(rating, userMinPrice, userMaxPrice)
             }
 
+
+
+            function deleteCartOnClick(){
+                total = 0
+                const deleteShopping = document.getElementById("shopping")
+                deleteShopping.innerText = ""
+                totalMessage.innerText = "Total: 0kr"
+                return total = 0
+            }
 
 
 
