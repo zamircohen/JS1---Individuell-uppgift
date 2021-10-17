@@ -1,31 +1,42 @@
+<!-- 
+    Frontend 1 - Javascript // Nackademin // Individual task - Store front
+    
+    @author Zamir Cohen
+    
+--------------------------------------------------------------------------->
+
 <!DOCTYPE html>
 
 <html>
 
     <head>
         <title>Individuella uppgiften - Store front</title>
+        <meta charset="UTF-8">
 
+        <!-- Adding CSS styles -->
         <style>
             .header {
                 overflow: hidden;
-                /* background-color: rgb(116, 0, 184, 249, 250); */
                 background-color: rgb(255,255,255);             
-                position: sticky; /* Set the navbar to fixed position */
-                top: 0; /* Position the navbar at the top of the page */
-                width: 100%; /* Full width */
+                position: sticky;                           /* Set the navbar to fixed position */
+                top: 0;                                     /* Position the navbar at the top of the page */
+                width: 100%;                                /* Full width */
             }    
 
+            .block {
+                border-width:2px;
+                border-style:solid;
+                border-color:black;
+            }
         </style>
-
-
-
     </head>
 
     <body>
 
     <div class="header">
 
-        <div id="filter">
+        <div class="block" id="filter" style="width: 600px">
+            <br>
             <label for="rating">Filter on rating (0-5)</label>
             <input id="rating" type="text" value="" min="1" max="5"/>
             <br>
@@ -37,12 +48,10 @@
 
             <button onclick="handleOnClick()" id="filterButton">Filter</button>
             <p id="errorMessage"></p>
-
         </div>
 
-        <h2>Shopping cart</h2>
+        <h2>Shopping cart &#128722</h2>
         <p id="total"></p>
-
 
         <div id="shopping">            
         </div>
@@ -50,7 +59,6 @@
         <div>
             <button onclick="deleteCartOnClick()" id="deleteButton">Clear cart</button>
         </div>
-
 
         <hr>
 
@@ -64,6 +72,7 @@
 
             const url = "https://mock-data-api.firebaseio.com/webb21/products.json"
 
+            // Defines all global variables
             let total = 0
             let rateInput = 0
             let minPriceInput = 0
@@ -77,7 +86,7 @@
             const filterButton = document.getElementById("filterButton")
             const userRating = document.getElementById("rating")
 
-
+            // Function for pushing the filter button
             function handleOnClick(){
                 const userInput = document.getElementById("rating")
                 const rating = userInput.value
@@ -100,7 +109,7 @@
             }
 
 
-
+            // Function for pushing the delete cart button
             function deleteCartOnClick(){
                 total = 0
                 const deleteShopping = document.getElementById("shopping")
@@ -143,22 +152,20 @@
                     })
 
 
-                    const line = document.createElement("hr")
+                    const divider = document.createElement("hr")
 
                     const image = document.createElement("img")
                     image.src = item["images"]["0"]["src"]["small"]
                     image.alt = item["images"]["0"]["alt"]
                     image.width = "300"
 
-                    // Adds product in total and list on a click
-                    // image.addEventListener("click", function() {                        
-                    //     total += item.price
-                    //     totalMessage.innerText = `Total: ${total}kr`
-                    //     const shoppingList = document.createElement("p")
-                    //     shoppingList.innerText = `${item.name}kr - ${item.price}kr`
-                    //     shoppingContainer.appendChild(shoppingList)
-                    // })
-
+                    image.addEventListener("click", function() {                        
+                        total += item.price
+                        totalMessage.innerText = `Total: ${total}kr`
+                        const shoppingList = document.createElement("p")
+                        shoppingList.innerText = `${item.name} - ${item.price}kr`
+                        shoppingContainer.appendChild(shoppingList)
+                    })
 
 
                     if(item.rating >= rating && item.price >= minPrice && item.price <= maxPrice){
@@ -169,7 +176,7 @@
                     productContainer.appendChild(productRating)
                     productContainer.appendChild(productStock)
                     productContainer.appendChild(buyButton)
-                    productContainer.appendChild(line)   
+                    productContainer.appendChild(divider)   
                     }
                     
 
