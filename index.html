@@ -140,8 +140,9 @@
                     const buyButton = document.createElement("button")
                     buyButton.innerText = `Buy`
 
+                    const divider = document.createElement("hr")
+
                     buyButton.addEventListener("click", function() {
-                        
                         total += item.price
                         totalMessage.innerText = `Total: ${total}kr`
 
@@ -150,9 +151,6 @@
                         
                         shoppingContainer.appendChild(shoppingList)
                     })
-
-
-                    const divider = document.createElement("hr")
 
                     const image = document.createElement("img")
                     image.src = item["images"]["0"]["src"]["small"]
@@ -199,9 +197,7 @@
             })    
         }
 
-
        getMessageList(rateInput, minPriceInput, maxPriceInput)
-
 
         </script>
 
