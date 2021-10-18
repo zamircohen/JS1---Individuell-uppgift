@@ -12,7 +12,7 @@
     <head>
         <title>Individuella uppgiften - Store front</title>
         <meta charset="UTF-8">
-
+        
         <!-- Adding CSS styles -->
         <style>
             .header {
@@ -23,7 +23,7 @@
                 width: 100%;                                /* Full width */
             }    
 
-            .block {
+            .filter-box {
                 border-width:2px;
                 border-style:solid;
                 border-color:black;
@@ -35,25 +35,25 @@
 
     <div class="header">
 
-        <div class="block" id="filter" style="width: 600px">
+        <!-- Filter box with input fields for rating, minimum price and maximum price -->
+        <div class="filter-box" id="filter-box" style="width: 550px">
             <br>
             <label for="rating">Filter on rating (0-5)</label>
-            <input id="rating" type="text" value="" min="1" max="5"/>
+            <input id="rating" type="text" value=""/>
             <br>
             <br>
-            <label for="priceRangeMin">Filter on price. From </label>
+            <label for="minPrice">Filter on price. From </label>
             <input id="minPrice" type="text" value="0" min="0"/>
-            <label for="priceRangeMax"> to </label>
+            <label for="maxPrice"> to </label>
             <input id="maxPrice" type="text" value="999999" min="0"/>
-
-            <button onclick="handleOnClick()" id="filterButton">Filter</button>
+            <button onclick="filterOnClick()" id="filterButton">Filter</button>
             <p id="errorMessage"></p>
         </div>
 
         <h2>Shopping cart &#128722</h2>
         <p id="total"></p>
 
-        <div id="shopping">            
+        <div id="shoppingList">            
         </div>
 
         <div>
@@ -67,139 +67,7 @@
         <div id="products">
         </div>
 
-
-        <script>
-
-            const url = "https://mock-data-api.firebaseio.com/webb21/products.json"
-
-            // Defines all global variables
-            let total = 0
-            let rateInput = 0
-            let minPriceInput = 0
-            let maxPriceInput = 999999
-            const totalMessage = document.getElementById("total")
-            totalMessage.innerText = "Total: 0kr" 
-
-            const productContainer = document.getElementById("products")
-            const shoppingContainer = document.getElementById("shopping")
-
-            const filterButton = document.getElementById("filterButton")
-            const userRating = document.getElementById("rating")
-
-            // Function for pushing the filter button
-            function handleOnClick(){
-                const userInput = document.getElementById("rating")
-                const rating = userInput.value
-                
-                const userInputminPrice = document.getElementById("minPrice")
-                const userInputmaxPrice = document.getElementById("maxPrice")
-
-                const userMinPrice = userInputminPrice.value
-                const userMaxPrice = userInputmaxPrice.value
-
-                const errorMessage = document.getElementById("errorMessage")
-
-                if(rating < 0 || rating > 5 || userMinPrice < 0 || userMaxPrice < 0){
-                    errorMessage.innerText = "Please insert valid values"
-                }else 
-                
-                errorMessage.innerText = ""
-                document.getElementById("products").innerHTML = ""                 // Clears the productlist
-                getMessageList(rating, userMinPrice, userMaxPrice)
-            }
-
-
-            // Function for pushing the delete cart button
-            function deleteCartOnClick(){
-                total = 0
-                const deleteShopping = document.getElementById("shopping")
-                deleteShopping.innerText = ""
-                totalMessage.innerText = "Total: 0kr"
-                return total = 0
-            }
-
-
-
-                function renderArticleItem(item, rating, minPrice, maxPrice) {
-
-                    const productName = document.createElement("h3")
-                    productName.innerText = item.name
-
-                    const productDescription = document.createElement("p")
-                    productDescription.innerText = item.description
-
-                    const productPrice = document.createElement("p")
-                    productPrice.innerText = `Price: ${item.price}kr`
-
-                    const productRating = document.createElement("i")
-                    productRating.innerText = `Rating: ${item.rating}/5`
-
-                    const productStock = document.createElement("p")
-                    productStock.innerText = `In stock: ${item.stock}`
-
-                    const buyButton = document.createElement("button")
-                    buyButton.innerText = `Buy`
-
-                    const divider = document.createElement("hr")
-
-                    buyButton.addEventListener("click", function() {
-                        total += item.price
-                        totalMessage.innerText = `Total: ${total}kr`
-
-                        const shoppingList = document.createElement("p")
-                        shoppingList.innerText = `${item.name} - ${item.price}kr`
-                        
-                        shoppingContainer.appendChild(shoppingList)
-                    })
-
-                    const image = document.createElement("img")
-                    image.src = item["images"]["0"]["src"]["small"]
-                    image.alt = item["images"]["0"]["alt"]
-                    image.width = "300"
-
-                    image.addEventListener("click", function() {                        
-                        total += item.price
-                        totalMessage.innerText = `Total: ${total}kr`
-                        const shoppingList = document.createElement("p")
-                        shoppingList.innerText = `${item.name} - ${item.price}kr`
-                        shoppingContainer.appendChild(shoppingList)
-                    })
-
-
-                    if(item.rating >= rating && item.price >= minPrice && item.price <= maxPrice){
-                    productContainer.appendChild(productName)
-                    productContainer.appendChild(image)
-                    productContainer.appendChild(productDescription)
-                    productContainer.appendChild(productPrice)
-                    productContainer.appendChild(productRating)
-                    productContainer.appendChild(productStock)
-                    productContainer.appendChild(buyButton)
-                    productContainer.appendChild(divider)   
-                    }
-                    
-
-                }
-
-
-
-            function renderArticleList(articleList, rating, minPrice, maxPrice) {
-                articleList.forEach(articleItem => {
-                    renderArticleItem(articleItem, rating, minPrice, maxPrice)
-                })
-            }            
-
-
-            function getMessageList(rating, minPrice, maxPrice) {
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                renderArticleList(data, rating, minPrice, maxPrice)
-            })    
-        }
-
-       getMessageList(rateInput, minPriceInput, maxPriceInput)
-
-        </script>
+        <script src="index.js"></script>
 
     </body>
 
